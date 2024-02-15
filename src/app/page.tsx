@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TodoForm from "@/components/TodoForm";
 import TodoBoard from "@/components/TodoBoard";
 import io from "socket.io-client";
-import { token, serverUrl } from "@/env";
+import { serverUrl } from "@/env";
 import { DragnDrop } from "@/components/DragnDrop";
-import { accessToken, userDetailsToken } from "@/constant";
+import { accessToken } from "@/constant";
 import UpdateTodoForm from "@/components/UpdateTodoForm";
 import { useCookies } from "next-client-cookies";
 import { useRouter } from "next/navigation";
@@ -38,6 +38,7 @@ export default function Home() {
             });
             const data = await res.json();
 
+            console.log(data);
             if (data.statusCode === 401) {
                 cookies.remove(accessToken);
                 router.push("/login");
@@ -83,6 +84,7 @@ export default function Home() {
                     columns={columns}
                     socket={socket}
                     setTaskDetail={setTaskDetail}
+                    userToken={userToken}
                 />
             </DragnDrop>
         </main>

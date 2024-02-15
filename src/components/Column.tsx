@@ -7,12 +7,14 @@ type Props = {
     tasks: Task[];
     socket: any;
     setTaskDetail: any;
+    userToken: string;
 };
 export default function Column({
     title,
     tasks = [],
     socket,
     setTaskDetail,
+    userToken,
 }: Props) {
     return (
         <div className="flex flex-col flex-shrink-0 w-72">
@@ -57,6 +59,7 @@ export default function Column({
                                 index={id}
                                 socket={socket}
                                 setTaskDetail={setTaskDetail}
+                                userToken={userToken}
                             />
                         ))}
                         {provided.placeholder}

@@ -1,6 +1,7 @@
 "use client";
 
-import { token, serverUrl } from "@/env";
+import { serverUrl } from "@/env";
+import { useRef } from "react";
 
 type Prop = {
     columns: Column;
@@ -11,10 +12,10 @@ type Prop = {
 type MyFormStatus = "Todo" | "Doing" | "Done";
 
 export default function TodoForm({ columns, socket, userToken }: Prop) {
+    const ref = useRef<HTMLFormElement>();
     const defaultPos = 65536;
     const calculatePos = (columns: Column, status: MyFormStatus) => {
         const selectColumn = columns[status];
-        console.log(selectColumn);
         if (selectColumn.length > 0) {
             const lastTodoPos = selectColumn[selectColumn.length - 1].pos;
             let currentPos = Math.floor(lastTodoPos / 65536);
@@ -46,7 +47,8 @@ export default function TodoForm({ columns, socket, userToken }: Prop) {
             },
             body: JSON.stringify(formFields),
         });
-        socket.emit("createdTodo");
+        ref.current?.reset();
+        socket.emit("createdTodo", userToken);
     };
 
     return (
@@ -55,7 +57,7 @@ export default function TodoForm({ columns, socket, userToken }: Prop) {
                 <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                     Add Todo
                 </h2>
-                <form action={createTodo}>
+                <form ref={ref} action={createTodo}>
                     <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div>
                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

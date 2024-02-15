@@ -3,7 +3,7 @@ import React from "react";
 import { Draggable } from "@hello-pangea/dnd";
 import { DeleteRounded, EditOutlined } from "@mui/icons-material";
 import { red } from "@mui/material/colors";
-import { serverUrl, token } from "@/env";
+import { serverUrl } from "@/env";
 
 type Props = {
     title: string;
@@ -11,6 +11,7 @@ type Props = {
     index: number;
     socket: any;
     setTaskDetail: any;
+    userToken: string;
 };
 export default function Task({
     title,
@@ -18,17 +19,18 @@ export default function Task({
     index,
     socket,
     setTaskDetail,
+    userToken,
 }: Props) {
     const deleteTask = async () => {
         await fetch(`${serverUrl}/todos/${task.id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${userToken}`,
             },
         });
 
-        socket.emit("deleteTodo");
+        socket.emit("deleteTodo", userToken);
     };
 
     const editTask = () => {

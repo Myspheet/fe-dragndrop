@@ -33,7 +33,7 @@ export default function UpdateTodoForm({
             });
 
             setTaskDetail();
-            socket.emit("todoUpdate");
+            socket.emit("todoUpdate", userToken);
         } catch (error) {
             console.log(error.message);
         }

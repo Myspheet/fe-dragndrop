@@ -12,6 +12,15 @@ type mutateType = {
     taskPos: number;
 };
 
+type Prop = {
+    children: React.ReactNode;
+    columns: Column;
+    setColumns: (...args: any[]) => void;
+    organizeData: (...args: any[]) => any;
+    socket: any;
+    userToken: string;
+};
+
 export function DragnDrop({
     children,
     columns,
@@ -19,9 +28,10 @@ export function DragnDrop({
     organizeData,
     socket,
     userToken,
-}) {
+}: Prop) {
     useEffect(() => {
         socket.on("updatedTodo", (res: Task[]) => {
+            console.log("updated", res);
             setColumns(organizeData(res));
         });
 
@@ -66,8 +76,8 @@ export function DragnDrop({
     };
 
     const mutation = useMutation({
-        mutationFn: (variables: mutateType) => {
-            return fetch(`${serverUrl}/todos/${variables.task.id}`, {
+        mutationFn: async (variables: mutateType) => {
+            return await fetch(`${serverUrl}/todos/${variables.task.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -78,6 +88,9 @@ export function DragnDrop({
                     pos: variables.taskPos,
                 }),
             });
+        },
+        onSuccess: () => {
+            socket.emit("updateTodos", userToken);
         },
     });
 
@@ -128,11 +141,15 @@ export function DragnDrop({
                 setColumns(updateColumns);
             }
 
-            mutation.mutate({ task, userToken, destinationTitle, taskPos });
-
-            socket.emit("updateTodos", updateColumns, (res: any) => {});
+            mutation.mutate({
+                task,
+                userToken,
+                destinationTitle,
+                taskPos,
+            });
         },
         [columns]
     );
+
     return <DragDropContext onDragEnd={onDragEnd}>{children}</DragDropContext>;
 }

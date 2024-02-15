@@ -9,8 +9,14 @@ type Prop = {
     columns: Column;
     socket: any;
     setTaskDetail: any;
+    userToken: string;
 };
-export default function TodoBoard({ columns, socket, setTaskDetail }: Prop) {
+export default function TodoBoard({
+    columns,
+    socket,
+    setTaskDetail,
+    userToken,
+}: Prop) {
     const cookies = useCookies();
     const router = useRouter();
 
@@ -38,6 +44,7 @@ export default function TodoBoard({ columns, socket, setTaskDetail }: Prop) {
                         tasks={columns[column as ColumnTitle]}
                         socket={socket}
                         setTaskDetail={setTaskDetail}
+                        userToken={userToken}
                     />
                 ))}
                 <div className="flex-shrink-0 w-6"></div>
