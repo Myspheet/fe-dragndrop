@@ -1,9 +1,8 @@
 "use client";
 
-import { userDetailsToken } from "@/constant";
-import { serverUrl, token } from "@/env";
+import { serverUrl } from "@/env";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function Register() {
@@ -37,7 +36,7 @@ export default function Register() {
 
             console.log("result", result);
             router.push("/login");
-        } catch (error) {
+        } catch (error: any) {
             setError(error.message.split(","));
         }
     };

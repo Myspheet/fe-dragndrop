@@ -34,7 +34,7 @@ export default function UpdateTodoForm({
 
             setTaskDetail();
             socket.emit("todoUpdate", userToken);
-        } catch (error) {
+        } catch (error: any) {
             console.log(error.message);
         }
     };

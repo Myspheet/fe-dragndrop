@@ -26,7 +26,7 @@ export default function Home() {
     const [taskDetail, setTaskDetail] = useState<Task>();
     const cookies = useCookies();
 
-    const userToken = cookies.get(accessToken);
+    const userToken = cookies.get(accessToken) as string;
 
     const getInitialData = async () => {
         try {

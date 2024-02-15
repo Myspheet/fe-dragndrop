@@ -40,8 +40,8 @@ export default function Login() {
 
             cookies.set(accessToken, result.accessToken);
             router.push("/");
-        } catch (error) {
-            setError(error.message);
+        } catch (error: any) {
+            setError(error?.message);
             console.log(error);
         }
     };

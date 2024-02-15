@@ -12,7 +12,7 @@ type Prop = {
 type MyFormStatus = "Todo" | "Doing" | "Done";
 
 export default function TodoForm({ columns, socket, userToken }: Prop) {
-    const ref = useRef<HTMLFormElement>();
+    const ref = useRef<HTMLFormElement>(null);
     const defaultPos = 65536;
     const calculatePos = (columns: Column, status: MyFormStatus) => {
         const selectColumn = columns[status];
