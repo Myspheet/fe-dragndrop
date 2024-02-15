@@ -54,7 +54,7 @@ export default function Home() {
     }
 
     return (
-        <main className="grid grid-flow-col auto-cols-max overflow-hidden">
+        <main className="grid grid-flow-col auto-cols-max">
             {taskDetail ? (
                 <UpdateTodoForm
                     socket={socket}
