@@ -26,15 +26,12 @@ export default function TodoBoard({
         router.push("/login");
     };
     return (
-        <div className="flex flex-col w-screen h-screen overflow-auto text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
+        <div className="flex flex-col w-screen h-screen overflow-hidden text-gray-700 bg-gradient-to-tr from-blue-200 via-indigo-200 to-pink-200">
             <div className="flex items-center flex-shrink-0 w-full h-16 px-10 bg-white bg-opacity-75">
                 <button onClick={logout}>
                     <LogoutOutlined sx={{ color: red[500] }} />
                     Logout
                 </button>
-            </div>
-            <div className="px-10 mt-6">
-                <h1 className="text-2xl font-bold">Team Project Board</h1>
             </div>
             <div className="flex flex-grow px-10 mt-4 space-x-6">
                 {Object.keys(columns).map((column: string, id: any) => (

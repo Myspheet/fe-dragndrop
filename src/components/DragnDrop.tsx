@@ -3,6 +3,7 @@
 import { serverUrl } from "@/env";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { useCallback, useEffect } from "react";
 
 type mutateType = {
@@ -77,17 +78,15 @@ export function DragnDrop({
 
     const mutation = useMutation({
         mutationFn: async (variables: mutateType) => {
-            return await fetch(`${serverUrl}/todos/${variables.task.id}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${variables.userToken}`,
-                },
-                body: JSON.stringify({
-                    status: variables.destinationTitle,
-                    pos: variables.taskPos,
-                }),
-            });
+            return await axios.patch(
+                `${serverUrl}/todos/${variables.task.id}`,
+                { status: variables.destinationTitle, pos: variables.taskPos },
+                {
+                    headers: {
+                        Authorization: `Bearer ${variables.userToken}`,
+                    },
+                }
+            );
         },
         onSuccess: () => {
             socket.emit("updateTodos", userToken);

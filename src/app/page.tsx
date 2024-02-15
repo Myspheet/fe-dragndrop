@@ -12,6 +12,7 @@ import { useCookies } from "next-client-cookies";
 import { useRouter } from "next/navigation";
 import { organizeData } from "@/helper/functions";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const socket = io(serverUrl);
 
@@ -28,37 +29,32 @@ export default function Home() {
 
     const userToken = cookies.get(accessToken) as string;
 
-    const getInitialData = async () => {
-        try {
-            const res = await fetch(`${serverUrl}/todos`, {
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ["todos"],
+        queryFn: async (): Promise<any> => {
+            const res = await axios.get(`${serverUrl}/todos`, {
                 headers: {
-                    "Content-Type": "application/json",
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            const data = await res.json();
 
-            console.log(data);
-            if (data.statusCode === 401) {
-                cookies.remove(accessToken);
-                router.push("/login");
-            } else {
-                const columnData = organizeData(data);
-                setColumns(columnData);
-                return columnData;
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useQuery({
-        queryKey: ["todos"],
-        queryFn: getInitialData,
+            setColumns(organizeData(res.data));
+            return res;
+        },
     });
 
+    if (isLoading) return <h2>Loading</h2>;
+    if (isError) {
+        const err = error as any;
+
+        if (err.response.data.statusCode === 401) {
+            cookies.remove(accessToken);
+            router.push("/login");
+        }
+    }
+
     return (
-        <main className="grid grid-flow-col auto-cols-max">
+        <main className="grid grid-flow-col auto-cols-max overflow-hidden">
             {taskDetail ? (
                 <UpdateTodoForm
                     socket={socket}

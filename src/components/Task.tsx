@@ -1,9 +1,11 @@
 "use client";
-import React from "react";
+import React, { FormEvent } from "react";
 import { Draggable } from "@hello-pangea/dnd";
 import { DeleteRounded, EditOutlined } from "@mui/icons-material";
 import { red } from "@mui/material/colors";
 import { serverUrl } from "@/env";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 type Props = {
     title: string;
@@ -21,19 +23,23 @@ export default function Task({
     setTaskDetail,
     userToken,
 }: Props) {
-    const deleteTask = async () => {
-        await fetch(`${serverUrl}/todos/${task.id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${userToken}`,
-            },
-        });
+    const { mutate: deleteTask } = useMutation({
+        mutationFn: async (e: FormEvent<HTMLButtonElement>) => {
+            e.preventDefault();
 
-        socket.emit("deleteTodo", userToken);
-    };
+            return await axios.delete(`${serverUrl}/todos/${task.id}`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+        },
+        onSuccess: () => {
+            socket.emit("deleteTodo", userToken);
+        },
+    });
 
     const editTask = () => {
+        setTaskDetail();
         setTaskDetail(task);
     };
     return (
