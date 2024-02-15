@@ -93,12 +93,12 @@ export default function Login() {
                                 Login
                             </button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Don't have an account?
+                                {"Don't have an account? "}
                                 <Link
                                     href="/register"
                                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                                 >
-                                    Sign Up here
+                                    {"Sign Up here"}
                                 </Link>
                             </p>
                         </form>
