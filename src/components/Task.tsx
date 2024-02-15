@@ -34,6 +34,7 @@ export default function Task({
             });
         },
         onSuccess: () => {
+            setTaskDetail();
             socket.emit("deleteTodo", userToken);
         },
     });

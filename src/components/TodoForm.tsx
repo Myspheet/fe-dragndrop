@@ -55,6 +55,9 @@ export default function TodoForm({ columns, socket, userToken }: Prop) {
             );
         },
         onSuccess: () => {
+            setDescription("");
+            setTitle("");
+            setStatus("");
             socket.emit("createdTodo", userToken);
         },
     });

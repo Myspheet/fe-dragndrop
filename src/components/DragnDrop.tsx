@@ -32,7 +32,6 @@ export function DragnDrop({
 }: Prop) {
     useEffect(() => {
         socket.on("updatedTodo", (res: Task[]) => {
-            console.log("updated", res);
             setColumns(organizeData(res));
         });
 
