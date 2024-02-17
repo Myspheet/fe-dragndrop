@@ -14,8 +14,6 @@ import { organizeData } from "@/helper/functions";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const socket = io(serverUrl);
-
 export default function Home() {
     const router = useRouter();
     const [columns, setColumns] = useState<Column>({
@@ -28,6 +26,12 @@ export default function Home() {
     const cookies = useCookies();
 
     const userToken = cookies.get(accessToken) as string;
+    const socket = io(serverUrl, {
+        query: {
+            "my-key": "my-value",
+        },
+        auth: { userToken },
+    });
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["todos"],
